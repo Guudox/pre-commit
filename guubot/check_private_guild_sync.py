@@ -4,6 +4,10 @@ import os
 import re
 import sys
 
+# Define the target string and comment style (e.g., '#' for Python)
+TARGET_STRING = ", guild=discord.Object(id=client.envir))"
+COMMENT_STYLE = "#"
+
 def escape_special_characters(target_string):
     """
     Escapes special characters in the target string to be safely used in regex.
