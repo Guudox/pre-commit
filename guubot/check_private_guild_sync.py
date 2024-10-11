@@ -21,7 +21,7 @@ def comment_out_end_of_line(line):
     escaped_target_string = escape_special_characters(TARGET_STRING)
 
     # Check if the line contains the target string
-    if TARGET_STRING in line:
+    if TARGET_STRING in line and COMMENT_STYLE not in line:
         # Use regex to replace the part after the target string
         # Matches everything after the target string and adds the comment
         modified_line = re.sub(rf"({escaped_target_string}.*)", r") " + COMMENT_STYLE + r"\1", line)
