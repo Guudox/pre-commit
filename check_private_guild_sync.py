@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import os
 import sys
 
@@ -51,4 +53,4 @@ def main():
             check_and_comment_file(file_path)
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())
