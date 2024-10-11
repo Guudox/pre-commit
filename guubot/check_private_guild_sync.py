@@ -4,8 +4,7 @@ import os
 import re
 import sys
 
-# Define the target string and comment style (e.g., '#' for Python)
-TARGET_STRING = "guild=discord.Object(id=client.envir))"
+TARGET_STRING = "guild=discord.Object"
 COMMENT_STYLE = "#"
 
 def escape_special_characters(target_string):
@@ -23,15 +22,16 @@ def comment_out_end_of_line(line):
 
     # Check if the line contains the target string
     if TARGET_STRING in line:
-        # Find the part of the line that includes the target string and comment it out
-        # First, split the line at the target string, then append the `)` and comment style
-        pre_comment = line.split(escaped_target_string)[0].rstrip()
-        comment_part = line.split(escaped_target_string)[1]
-        
-        # Add the closing parenthesis before the comment and apply the comment style
-        modified_line = f"{pre_comment}) {COMMENT_STYLE}{escaped_target_string}{comment_part}"
-        return modified_line
-    
+        # Use regex to capture the part before the target string and the rest of the line after the string
+        # Add the closing parenthesis and comment out the rest
+        pattern = rf"(.*)\({escaped_target_string}.*"
+        match = re.match(pattern, line)
+        if match:
+            # Capture everything before the target string and add a closing parenthesis before the comment
+            pre_comment = match.group(1).rstrip() + ")"
+            comment_part = f" {COMMENT_STYLE} {line[len(pre_comment) + 1:].strip()}"
+            return pre_comment + comment_part + "\n"
+
     return line
 
 def check_and_comment_file(file_path):
@@ -65,6 +65,6 @@ def main():
         if is_code_file(file_path):
             print(f"Checking file: {file_path}")
             check_and_comment_file(file_path)
-
+            
 if __name__ == "__main__":
     raise SystemExit(main())
