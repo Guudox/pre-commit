@@ -4,7 +4,7 @@ import os
 import re
 import sys
 
-TARGET_STRING = "guild=discord.Object"
+TARGET_STRING = ", guild=discord.Object(id=client.envir))"
 COMMENT_STYLE = "#"
 
 def escape_special_characters(target_string):
