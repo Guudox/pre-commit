@@ -4,10 +4,6 @@ import os
 import re
 import sys
 
-# Define the target string and comment style (e.g., '#' for Python)
-TARGET_STRING = ", guild=discord.Object(id=client.envir))"
-COMMENT_STYLE = "#"
-
 def escape_special_characters(target_string):
     """
     Escapes special characters in the target string to be safely used in regex.
@@ -23,9 +19,13 @@ def comment_out_end_of_line(line):
 
     # Check if the line contains the target string
     if TARGET_STRING in line:
-        # Use regex to replace the part after the target string
-        # Matches everything after the target string and adds the comment
-        modified_line = re.sub(rf"({escaped_target_string}.*)", r") " + COMMENT_STYLE + r"\1", line)
+        # Find the part of the line that includes the target string and comment it out
+        # First, split the line at the target string, then append the `)` and comment style
+        pre_comment = line.split(escaped_target_string)[0].rstrip()
+        comment_part = line.split(escaped_target_string)[1]
+        
+        # Add the closing parenthesis before the comment and apply the comment style
+        modified_line = f"{pre_comment}) {COMMENT_STYLE}{escaped_target_string}{comment_part}"
         return modified_line
     
     return line
