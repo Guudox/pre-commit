@@ -7,15 +7,17 @@ import sys
 TARGET_STRING = ", guild=discord.Object(id=client.envir))"
 COMMENT_STYLE = "#"
 
-def comment_out_line(line):
+def comment_out_end_of_line(line):
     """
-    Comments out the line if the target string is found and the line is not already commented.
+    Finds the target string in the line and comments out the part after it,
+    while adding a closing parenthesis before the comment.
     """
-    stripped_line = line.strip()
-    
-    # Check if the line contains the target string and is not already commented
-    if TARGET_STRING in stripped_line and not stripped_line.startswith(COMMENT_STYLE):
-        return f"{COMMENT_STYLE} {line}"
+    # Check if the line contains the target string
+    if TARGET_STRING in line:
+        # Use regex to replace the part after the target string
+        # Matches everything after the target string and adds the comment
+        modified_line = re.sub(rf"({TARGET_STRING}.*)", r") " + COMMENT_STYLE + r"\1", line)
+        return modified_line
     
     return line
 
@@ -26,7 +28,7 @@ def check_and_comment_file(file_path):
     with open(file_path, "r") as file:
         lines = file.readlines()
 
-    modified_lines = [comment_out_line(line) for line in lines]
+    modified_lines = [comment_out_end_of_line(line) for line in lines]
 
     # Write back the modified content to the file
     with open(file_path, "w") as file:
