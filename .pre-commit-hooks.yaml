@@ -1,6 +1,6 @@
-id: check-private-guild-sync
-    name: check private guild-sync
-    description: make sure guubot does not have the private guild sync attached to commands
-    entry: check-private-guild-sync
-    language: python
-    types: [python]
+- id: check-private-guild-sync
+  name: check private guild sync
+  description: make sure guubot does not have the private guild sync attached to commands
+  entry: check-private-guild-sync
+  language: python
+  types: [python]
