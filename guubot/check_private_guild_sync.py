@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import re
 import sys
 
 # Define the target string and comment style (e.g., '#' for Python, '//' for JavaScript)
