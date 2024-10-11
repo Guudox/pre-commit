@@ -11,26 +11,17 @@ def escape_special_characters(target_string):
     """
     Escapes special characters in the target string to be safely used in regex.
     """
-    return re.escape(target_string)
-
-def comment_out_end_of_line(line):
-    """
-    Finds the target string in the line and comments out the part after it,
-    while adding a closing parenthesis before the comment.
-    """
-    escaped_target_string = escape_special_characters(TARGET_STRING)
 
     # Check if the line contains the target string
     if TARGET_STRING in line:
-        # Use regex to capture the part before the target string and the rest of the line after the string
-        # Add the closing parenthesis and comment out the rest
-        pattern = rf"(.*)\({escaped_target_string}.*"
-        match = re.match(pattern, line)
-        if match:
-            # Capture everything before the target string and add a closing parenthesis before the comment
-            pre_comment = match.group(1).rstrip() + ")"
-            comment_part = f" {COMMENT_STYLE} {line[len(pre_comment) + 1:].strip()}"
-            return pre_comment + comment_part + "\n"
+        # Find the part of the line that includes the target string and comment it out
+        # First, split the line at the target string, then append the `)` and comment style
+        pre_comment = line.split(escaped_target_string)[0].rstrip()
+        comment_part = line.split(escaped_target_string)[1]
+        
+        # Add the closing parenthesis before the comment and apply the comment style
+        modified_line = f"{pre_comment}) {COMMENT_STYLE}{escaped_target_string}{comment_part}"
+        return modified_line
 
     return line
 
