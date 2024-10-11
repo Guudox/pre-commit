@@ -4,20 +4,24 @@ import os
 import re
 import sys
 
-# Define the target string and comment style (e.g., '#' for Python, '//' for JavaScript)
-TARGET_STRING = ", guild=discord.Object(id=client.envir))"
-COMMENT_STYLE = "#"
+def escape_special_characters(target_string):
+    """
+    Escapes special characters in the target string to be safely used in regex.
+    """
+    return re.escape(target_string)
 
 def comment_out_end_of_line(line):
     """
     Finds the target string in the line and comments out the part after it,
     while adding a closing parenthesis before the comment.
     """
+    escaped_target_string = escape_special_characters(TARGET_STRING)
+
     # Check if the line contains the target string
     if TARGET_STRING in line:
         # Use regex to replace the part after the target string
         # Matches everything after the target string and adds the comment
-        modified_line = re.sub(rf"({TARGET_STRING}.*)", r") " + COMMENT_STYLE + r"\1", line)
+        modified_line = re.sub(rf"({escaped_target_string}.*)", r") " + COMMENT_STYLE + r"\1", line)
         return modified_line
     
     return line
@@ -37,10 +41,9 @@ def check_and_comment_file(file_path):
 
 def is_code_file(file_path):
     """
-    Filter to only apply the check to code files (e.g., .py, .js, etc.).
-    Modify the extensions as needed.
+    Filter to only apply the check to code files (e.g., .py).
     """
-    return file_path.endswith(('.py'))
+    return file_path.endswith('.py')
 
 def main():
     """
